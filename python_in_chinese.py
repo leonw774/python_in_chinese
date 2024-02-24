@@ -61,8 +61,8 @@ word_table = [
     ('assert', '斷言'),
     ('break', '脫出'),
     ('continue', '繼續'),
-    ('try', '試'),
-    ('except', '接'),
+    ('try', '嘗試'),
+    ('except', '例外'),
     ('finally', '最後'),
     ('while', '當'),
     ('for', '凡'),
@@ -100,7 +100,7 @@ word_table = [
     ('enumerate', '列舉'),
     ('eval', '求值'),
     ('exec', '執行'),
-    ('filter', '篩'),
+    ('filter', '篩選'),
     ('float', '浮點數'),
     ('format', '格式'),
     ('frozenset', '凍集合'),
@@ -133,7 +133,7 @@ word_table = [
     ('property', '特征屬性'),
     ('range', '範圍'),
     ('repr', '表示'),
-    ('reversed', '逆'),
+    ('reversed', '逆向'),
     ('round', '捨入'),
     ('set', '集合'),
     ('setattr', '設屬性'),
@@ -149,8 +149,8 @@ word_table = [
     ('zip', '鏈'),
 # 分離符
     (':', '則'),
-    (':', '定義為'),
-    (':', '預期為'),
+    (':', '做'),
+    (':', '為'),
     ('.', '的')
 ]
 
@@ -177,7 +177,7 @@ splitter_pattern = r'|'.join([
         r'([fru]?\'.+\')',
         f'[\'\"]{3}.+[\'\"]{3}',
         # delimiters
-        r'([\\\(\)\{\}\[\]\"\'\:\.,@])',
+        r'([\\\(\)\{\}\[\]\"\'\:\.,;@])',
     ] + [
         # chinese translated delimiter and operators
         f'({cn_word})'
