@@ -70,7 +70,7 @@ word_table = [
     ('with', '以'),
     ('as', '作為'),
     ('class', '類別'),
-    ('def', '函式'),
+    ('def', '定義'),
     ('lambda', 'lambda'),
     ('async', '異步'),
     ('nonlocal', '外域'),
