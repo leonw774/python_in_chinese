@@ -1,43 +1,3 @@
-# python_in_chinese
-
-Write the operators, keywords, and build-in functions in python in chinese.
-
-Example codes comes from `https://rosettacode.org/`
-
-## Usage
-
-``` bash
-python3 -m python_in_chinese your_chinese_script.zpy
-```
-
-## Examples
-
-`examples/雙值和.zpy`
-
-```
-定義 解雙值和（數字串、目標數）為
-    甲設成零
-    乙設成長度（數字串）減一
-    當甲小於乙做
-        若數字串〈甲〉加數字串〈乙〉等於目標數則
-            回傳（甲, 乙）
-        若數字串〈甲〉加數字串〈乙〉小於目標數則
-            甲設成自己加一
-        否則
-            乙設成自己減一
-    回傳 無
-
-# 測資
-把數字串設成（零, 二, 十一, 十九, 九十）
-印出（解雙值和（數字串, 二十一））
-印出（解雙值和（數字串, 二十五））
-```
-
----
-
-`examples/背包問題.py`
-
-```
 類別 物品 為
     定義 __init__（自身、名字、價值、重量、容量） 為
         自身的名字 設成 名字
@@ -88,4 +48,3 @@ python3 -m python_in_chinese your_chinese_script.zpy
     物品數量乘可選物品〈物品編號〉的重量
     凡物品編號、物品數量在列舉（解答物品數量）
 ））
-```

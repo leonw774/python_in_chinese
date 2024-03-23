@@ -1,6 +1,8 @@
 import sys
 import re
 
+from chinese_number_parser import parse_ch_num
+
 word_table = [
 #代數
     ('+', '加'),
@@ -19,13 +21,13 @@ word_table = [
     ('>>', '右移'),
 #賦值
     ('=', '設成'),
-    ('+=', '加並設成'),
-    ('-=', '減並設成'),
-    ('*=', '乘並設成'),
-    ('/=', '除並設成'),
-    ('%=', '模並設成'),
-    ('**=', '冪並設成'),
-    ('//=', '底除並設成'),
+    ('+=', '設成自己加'),
+    ('-=', '設成自己減'),
+    ('*=', '設成自己乘'),
+    ('/=', '設成自己除'),
+    ('%=', '設成自己模'),
+    ('**=', '設成自己冪'),
+    ('//=', '設成自己底除'),
 #位元
 #比較
     ('==', '等於'),
@@ -35,47 +37,49 @@ word_table = [
     ('>=', '大於等於'),
     ('<=', '小於等於'),
 #邏輯
-    ('not', '非'),
-    ('and', '且'),
-    ('or', '或'),
+    (' not ', '非'),
+    (' and ', '且'),
+    (' or ', '或'),
 #身分
-    ('is', '是'),
-    ('is not', '不是'),
+    (' is ', '是'),
+    (' is not ', '不是'),
 #成員
-    ('in', '在'),
-    ('not in', '不在'),
-#關鍵字
+    (' in ', '在'),
+    (' not in ', '不在'),
+#常數
     ('False', '假'),
     ('True', '真'),
     ('None', '無'),
-    ('if', '若'),
-    ('else', '否'),
-    ('elif', '又若'),
-    ('from', '從'),
-    ('import', '引入'),
-    ('return', '回傳'),
-    ('yield', '生成'),
-    ('pass', '略'),
-    ('await', '等待'),
-    ('raise', '抛出'),
-    ('assert', '斷言'),
-    ('break', '脫出'),
-    ('continue', '繼續'),
-    ('try', '嘗試'),
-    ('except', '例外'),
-    ('finally', '最後'),
-    ('while', '當'),
-    ('for', '凡'),
-    ('in', '在'),
-    ('with', '以'),
-    ('as', '作為'),
+#控制符號
+    ('if ', '若'),
+    ('else ', '否'),
+    ('elif ', '又若'),
+    ('from ', '從'),
+    ('import ', '引入'),
+    ('return ', '回傳'),
+    ('yield ', '生成'),
+    ('pass ', '略'),
+    ('await ', '等待'),
+    ('raise ', '抛出'),
+    ('assert ', '斷言'),
+    ('break ', '脫出'),
+    ('continue ', '繼續'),
+    ('try ', '嘗試'),
+    ('except ', '例外'),
+    ('finally ', '最後'),
+    ('while ', '當'),
+    ('for ', '凡'),
+    (' in ', '在'),
+    ('with ', '以'),
+    (' as ', '作為'),
+    ('del ', '刪'),
+#名稱定義
     ('class', '類別'),
     ('def', '定義'),
     ('lambda', 'lambda'),
     ('async', '異步'),
     ('nonlocal', '外域'),
     ('global', '全域'),
-    ('del', '刪'),
 #內建函數
     ('abs', '絕對值'),
     ('aiter', '異步迭代'),
@@ -151,7 +155,14 @@ word_table = [
     (':', '則'),
     (':', '做'),
     (':', '為'),
-    ('.', '的')
+    ('.', '的'),
+    (',', '、'),
+    ('(', '（'),
+    (')', '）'),
+    ('[', '〈'),
+    (']', '〉'),
+# 中文文法
+    ('', '把')
 ]
 
 # sort table with descending chinese string len
@@ -166,7 +177,7 @@ translation_dict = {
     for word, ch_word in word_table
 }
 
-comment_pattern = r'#.+'
+comment_pattern = r'#[^\r\n]+'
 
 # make splitter pattern
 splitter_pattern = r'|'.join([
@@ -182,7 +193,7 @@ splitter_pattern = r'|'.join([
         # chinese translated delimiter and operators
         f'({cn_word})'
         for word, cn_word in word_table
-        if not word.isalpha() and ' ' not in word
+        if not word.isalpha() or word.endswith(' ')
     ]
 )
 splitter_pattern = re.compile(splitter_pattern)
@@ -193,7 +204,7 @@ if __name__ == '__main__':
     else:
         with open(sys.argv[1], 'r', encoding='utf8') as f:
             zh_script = f.read()
-    
+        # print(zh_script)
         zh_script = re.sub(comment_pattern, '', zh_script)
 
         zh_script_splits = [
@@ -203,10 +214,18 @@ if __name__ == '__main__':
         ]
         # print(zh_script_splits)
 
-        script_splits = [
+        # syntax replacement
+        zh_script_splits = [
             translation_dict.get(s, s)
             for s in zh_script_splits
         ]
+
+        # number literal replacement
+        script_splits = [
+            str(parse_ch_num(s))
+            for s in zh_script_splits
+        ]
+
         try:
             exec(''.join(script_splits))
         except Exception as e:
